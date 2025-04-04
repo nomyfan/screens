@@ -1,20 +1,16 @@
 #[cfg(target_os = "macos")]
 mod macos;
+#[cfg(target_os = "windows")]
+mod windows;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Screen {
-    /// Logical width of the screen.
-    pub width: f64,
-    /// Logical height of the screen.
-    pub height: f64,
-    /// Logical visible width of the screen.
+    pub logical_size: (f64, f64),
     #[cfg(target_os = "macos")]
-    pub visible_width: f64,
-    /// Logical visible height of the screen.
-    #[cfg(target_os = "macos")]
-    pub visible_height: f64,
-    /// Scale factor of the screen.
-    pub scale_factor: f64,
-    /// Whether the screen is the main screen.
-    pub is_main: bool,
+    /// Logical visible size.
+    pub visible_size: (f64, f64),
+    /// Physical resolution.
+    pub resolution: (u32, u32),
+    /// Whether the screen is the primary screen.
+    pub primary: bool,
 }
