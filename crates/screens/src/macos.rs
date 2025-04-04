@@ -35,9 +35,9 @@ impl Screen {
                     let primary = std::ptr::eq(main_screen, ns_screen);
 
                     screens.push(Screen {
-                        position: Rect::from(frame),
-                        visible_position: Rect::from(visible_frame),
-                        resolution,
+                        frame: frame.into(),
+                        visible_frame: visible_frame.into(),
+                        resolution: resolution.into(),
                         primary,
                     });
                 }

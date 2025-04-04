@@ -57,14 +57,16 @@ unsafe extern "system" fn monitor_enum_proc(
         dev_mode
     };
 
-    let position = Rect::from(monitor_info.monitorInfo.rcMonitor);
+    let frame = Rect::from(monitor_info.monitorInfo.rcMonitor);
+    let visible_frame = Rect::from(monitor_info.monitorInfo.rcWork);
     let physical_width = dev_mode.dmPelsWidth;
     let physical_height = dev_mode.dmPelsHeight;
     let primary = (monitor_info.monitorInfo.dwFlags & MONITORINFOF_PRIMARY) == MONITORINFOF_PRIMARY;
 
     let screen = Screen {
-        position,
-        resolution: (physical_width, physical_height),
+        frame,
+        visible_frame,
+        resolution: (physical_width, physical_height).into(),
         primary,
     };
 

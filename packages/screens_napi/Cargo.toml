@@ -1,0 +1,18 @@
+[package]
+edition = "2024"
+name = "screens_napi"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = "2"
+napi-derive = "2"
+screens = { path = "../../crates/screens", features = ["napi"] }
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+lto = true
