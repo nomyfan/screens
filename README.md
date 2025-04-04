@@ -1,1 +1,1 @@
-Get all screens avaible on your OS.
+List all screens on your system.
