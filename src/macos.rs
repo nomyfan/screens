@@ -1,9 +1,20 @@
-use crate::Screen;
+use crate::{Rect, Screen};
 use cocoa::base::{id, nil};
-use cocoa::foundation::NSArray;
+use cocoa::foundation::{NSArray, NSRect};
 use cocoa::{appkit::NSScreen, foundation::NSString};
 use core_graphics::display::{CGDirectDisplayID, CGDisplayMode, kDisplayModeNativeFlag};
 use objc::{msg_send, sel, sel_impl};
+
+impl From<NSRect> for Rect {
+    fn from(value: NSRect) -> Self {
+        Self {
+            x: value.origin.x,
+            y: value.origin.y,
+            width: value.size.width,
+            height: value.size.height,
+        }
+    }
+}
 
 impl Screen {
     pub fn screens() -> Vec<Self> {
@@ -24,8 +35,8 @@ impl Screen {
                     let primary = std::ptr::eq(main_screen, ns_screen);
 
                     screens.push(Screen {
-                        logical_size: (frame.size.width, frame.size.height),
-                        visible_size: (visible_frame.size.width, visible_frame.size.height),
+                        position: Rect::from(frame),
+                        visible_position: Rect::from(visible_frame),
                         resolution,
                         primary,
                     });

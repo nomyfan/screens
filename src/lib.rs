@@ -4,12 +4,20 @@ mod macos;
 mod windows;
 
 #[derive(Debug, Clone, Copy)]
+pub struct Rect {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
+}
+
+#[derive(Debug, Clone, Copy)]
 pub struct Screen {
-    pub logical_size: (f64, f64),
+    pub position: Rect,
     #[cfg(target_os = "macos")]
     /// Logical visible size.
-    pub visible_size: (f64, f64),
-    /// Physical resolution.
+    pub visible_position: Rect,
+    /// Native resolution.
     pub resolution: (u32, u32),
     /// Whether the screen is the primary screen.
     pub primary: bool,

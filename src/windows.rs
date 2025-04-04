@@ -1,11 +1,26 @@
-use crate::Screen;
-use windows::Win32::Foundation::LPARAM;
+use crate::{Rect, Screen};
+use windows::Win32::Foundation::{LPARAM, RECT};
 use windows::Win32::Graphics::Gdi::{
     DEVMODEW, ENUM_CURRENT_SETTINGS, EnumDisplayMonitors, EnumDisplaySettingsW, GetMonitorInfoW,
     HDC, HMONITOR, MONITORINFO, MONITORINFOEXW,
 };
 use windows::Win32::UI::WindowsAndMessaging::MONITORINFOF_PRIMARY;
 use windows::core::{BOOL, PCWSTR};
+
+impl From<RECT> for Rect {
+    fn from(value: RECT) -> Self {
+        let x = value.left;
+        let y = value.top;
+        let width = value.right - value.left;
+        let height = value.bottom - value.top;
+        Self {
+            x: x as f64,
+            y: y as f64,
+            width: width as f64,
+            height: height as f64,
+        }
+    }
+}
 
 unsafe extern "system" fn monitor_enum_proc(
     hmonitor: HMONITOR,
@@ -42,16 +57,13 @@ unsafe extern "system" fn monitor_enum_proc(
         dev_mode
     };
 
-    let logical_width =
-        monitor_info.monitorInfo.rcMonitor.right - monitor_info.monitorInfo.rcMonitor.left;
-    let logical_height =
-        monitor_info.monitorInfo.rcMonitor.bottom - monitor_info.monitorInfo.rcMonitor.top;
+    let position = Rect::from(monitor_info.monitorInfo.rcMonitor);
     let physical_width = dev_mode.dmPelsWidth;
     let physical_height = dev_mode.dmPelsHeight;
     let primary = (monitor_info.monitorInfo.dwFlags & MONITORINFOF_PRIMARY) == MONITORINFOF_PRIMARY;
 
     let screen = Screen {
-        logical_size: (logical_width as f64, logical_height as f64),
+        position,
         resolution: (physical_width, physical_height),
         primary,
     };
