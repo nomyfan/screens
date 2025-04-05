@@ -1,3 +1,3 @@
 [workspace]
-members = ["crates/screens", "packages/screens_napi"]
+members = ["screens", "screens_napi"]
 resolver = "3"
