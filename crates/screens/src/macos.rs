@@ -43,6 +43,16 @@ impl Screen {
                 }
             }
 
+            // Map origin from left-bottom to left-top
+            let offset = screens.iter().find(|x| x.primary).map(|x| -x.frame.height);
+            if let Some(offset) = offset {
+                for screen in screens.iter_mut() {
+                    screen.frame.y = screen.frame.y + screen.frame.height + offset;
+                    screen.visible_frame.y =
+                        screen.visible_frame.y + screen.visible_frame.height + offset;
+                }
+            }
+
             return screens;
         }
     }
